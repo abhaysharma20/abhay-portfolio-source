@@ -40,14 +40,14 @@ class AchievementsPage extends StatelessWidget {
         "desc": "Shipped solutions in FinTech, Restaurant management, and Social Media.",
         "icon": Icons.business_center_outlined,
       },
-      // {
-      //   "target": 95.0,
-      //   "prefix": "",
-      //   "suffix": "%",
-      //   "label": "CI/CD Pipeline Automation",
-      //   "desc": "Utilized Fastlane and GitHub Actions to automate app distribution.",
-      //   "icon": Icons.autorenew,
-      // },
+      {
+        "target": 95.0,
+        "prefix": "",
+        "suffix": "%",
+        "label": "CI/CD Pipeline Automation",
+        "desc": "Utilized Fastlane and GitHub Actions to automate app distribution.",
+        "icon": Icons.autorenew,
+      },
     ];
 
     return Padding(

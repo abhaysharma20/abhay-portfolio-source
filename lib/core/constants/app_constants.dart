@@ -8,7 +8,7 @@ class AppConstants {
       "Senior Flutter Developer • Cross-Platform Mobile • Python Backend";
 
   static const String email = "sharmaabhayagra@gmail.com";
-  static const String phone = "+91 7895003405";
+  // static const String phone = "+91 7895003405";
   static const String adminEmail = "sharmaabhayagra@gmail.com";
   static const String location = "Greater Noida, India";
   static const String appVersion = "1.3.0";
@@ -18,6 +18,7 @@ class AppConstants {
 
   static const String github = "https://github.com/abhaysharma20";
   static const String linkedin = "https://www.linkedin.com/in/abhaysharma20/";
+  // static const String whatsapp = "https://wa.me/917895003405";
 
   // Brand colors
   static const Color primaryColor = Color(0xFF00E5FF); // Neon Cyan
