@@ -39,7 +39,7 @@ class _MessagesPageState extends State<MessagesPage> {
       try {
         // Fetch credentials from Firestore for secure cloud-based validation
         final doc = await FirebaseFirestore.instance
-            .collection('admin_config')
+            .collection('credentials')
             .doc('credentials')
             .get();
 
@@ -64,7 +64,7 @@ class _MessagesPageState extends State<MessagesPage> {
         }
       } catch (e) {
         setState(() {
-          _errorMessage = "Unable to connect to database server.";
+          _errorMessage = "Connection error: $e";
         });
       } finally {
         setState(() {
