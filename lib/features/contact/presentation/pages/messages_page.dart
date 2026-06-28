@@ -13,6 +13,7 @@ class MessagesPage extends StatefulWidget {
 
 class _MessagesPageState extends State<MessagesPage> {
   bool _isAuthenticated = false;
+  bool _isLoading = false;
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _loginFormKey = GlobalKey<FormState>();
@@ -25,19 +26,49 @@ class _MessagesPageState extends State<MessagesPage> {
     super.dispose();
   }
 
-  void _attemptLogin() {
+  Future<void> _attemptLogin() async {
     if (_loginFormKey.currentState?.validate() == true) {
       final inputUser = _usernameController.text.trim();
       final inputPass = _passwordController.text;
 
-      if (inputUser == AppConstants.adminUsername && inputPass == AppConstants.adminPassword) {
+      setState(() {
+        _isLoading = true;
+        _errorMessage = null;
+      });
+
+      try {
+        // Fetch credentials from Firestore for secure cloud-based validation
+        final doc = await FirebaseFirestore.instance
+            .collection('admin_config')
+            .doc('credentials')
+            .get();
+
+        if (doc.exists && doc.data() != null) {
+          final data = doc.data()!;
+          final expectedUser = data['username'] as String?;
+          final expectedPass = data['password'] as String?;
+
+          if (inputUser == expectedUser && inputPass == expectedPass) {
+            setState(() {
+              _isAuthenticated = true;
+            });
+          } else {
+            setState(() {
+              _errorMessage = "Invalid Username or Password";
+            });
+          }
+        } else {
+          setState(() {
+            _errorMessage = "Admin credentials not configured on database server.";
+          });
+        }
+      } catch (e) {
         setState(() {
-          _isAuthenticated = true;
-          _errorMessage = null;
+          _errorMessage = "Unable to connect to database server.";
         });
-      } else {
+      } finally {
         setState(() {
-          _errorMessage = "Invalid Username or Password";
+          _isLoading = false;
         });
       }
     }
@@ -153,7 +184,7 @@ class _MessagesPageState extends State<MessagesPage> {
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: _attemptLogin,
+                        onPressed: _isLoading ? null : _attemptLogin,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: theme.primaryColor,
                           foregroundColor: isDark ? Colors.black : Colors.white,
@@ -161,13 +192,22 @@ class _MessagesPageState extends State<MessagesPage> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: const Text(
-                          "AUTHENTICATE",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.1,
-                          ),
-                        ),
+                        child: _isLoading
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                ),
+                              )
+                            : const Text(
+                                "AUTHENTICATE",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1.1,
+                                ),
+                              ),
                       ),
                     ),
                   ],

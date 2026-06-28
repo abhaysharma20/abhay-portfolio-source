@@ -12,8 +12,6 @@ class AppConstants {
   static const String adminEmail = "sharmaabhayagra@gmail.com";
   static const String location = "Greater Noida, India";
   static const String appVersion = "1.3.0";
-  static const String adminUsername = "abhay";
-  static const String adminPassword = "Abhay@AdminPass123";
 
   static const String resumeUrl =
       "https://drive.google.com/file/d/1wAtyKDNrrO1_B6aQS4iXM6sCrNOL66Vg/view?usp=sharing";
