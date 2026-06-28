@@ -7,8 +7,9 @@ import 'core/providers/theme_provider.dart';
 import 'core/providers/contact_provider.dart';
 import 'providers/journaling_provider.dart';
 import 'providers/date_time_picker_provider.dart';
-import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +17,10 @@ void main() async {
   try {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
+    );
+    // Disable offline persistence on web to prevent hangs/lockups in Incognito/Private browsing
+    FirebaseFirestore.instance.settings = const Settings(
+      persistenceEnabled: false,
     );
   } catch (e) {
     debugPrint("Firebase initialization failed/skipped: $e");
