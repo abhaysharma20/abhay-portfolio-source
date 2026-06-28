@@ -7,10 +7,10 @@ class AppConstants {
   static const String subTitle =
       "Senior Flutter Developer • Cross-Platform Mobile • Python Backend";
 
-  static const String email = "abhay@example.com";
-  static const String phone = "+91 98765 43210";
-  static const String adminEmail = "abhay@example.com";
-  static const String location = "Bengaluru, India";
+  static const String email =  "sharmaabhayagra@gmail.com";
+  static const String phone = "+91 7895003405";
+  static const String adminEmail = "sharmaabhayagra@gmail.com";
+  static const String location = "Greater Noida, India";
 
   // Dummy Resume URL - will be updated later
   static const String resumeUrl =

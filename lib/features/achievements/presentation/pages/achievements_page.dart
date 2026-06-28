@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/app_constants.dart';
 
 class AchievementsPage extends StatelessWidget {
@@ -137,7 +139,7 @@ class AchievementsPage extends StatelessWidget {
           return Column(
             children: AppConstants.testimonials.map((t) => Padding(
               padding: const EdgeInsets.only(bottom: 16),
-              child: _testimonialCard(context, t, isDark),
+              child: TestimonialCard(data: t, isDark: isDark),
             )).toList(),
           );
         }
@@ -147,47 +149,133 @@ class AchievementsPage extends StatelessWidget {
           children: AppConstants.testimonials.map((t) => Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: _testimonialCard(context, t, isDark),
+              child: TestimonialCard(data: t, isDark: isDark),
             ),
           )).toList(),
         );
       },
     );
   }
+}
 
-  Widget _testimonialCard(BuildContext context, Map<String, String> data, bool isDark) {
+class TestimonialCard extends StatefulWidget {
+  final Map<String, String> data;
+  final bool isDark;
+
+  const TestimonialCard({
+    super.key,
+    required this.data,
+    required this.isDark,
+  });
+
+  @override
+  State<TestimonialCard> createState() => _TestimonialCardState();
+}
+
+class _TestimonialCardState extends State<TestimonialCard> {
+  bool _isHovered = false;
+
+  Future<void> _launchURL(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.all(28),
-      decoration: BoxDecoration(
-        color: isDark ? AppConstants.cardDark : AppConstants.cardLight,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: isDark ? AppConstants.borderDark : AppConstants.borderLight),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(Icons.format_quote, color: theme.primaryColor.withOpacity(0.5), size: 36),
-          const SizedBox(height: 12),
-          Text(
-            data["quote"]!,
-            style: const TextStyle(
-              fontSize: 14,
-              height: 1.6,
-              fontStyle: FontStyle.italic,
+    
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () => _launchURL(AppConstants.linkedin),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOutCubic,
+          padding: const EdgeInsets.all(28),
+          transform: Matrix4.translationValues(0, _isHovered ? -6 : 0, 0),
+          decoration: BoxDecoration(
+            color: widget.isDark 
+                ? (_isHovered ? Colors.white.withOpacity(0.02) : AppConstants.cardDark)
+                : (_isHovered ? Colors.black.withOpacity(0.01) : AppConstants.cardLight),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: _isHovered 
+                  ? theme.primaryColor.withOpacity(0.6) 
+                  : (widget.isDark ? AppConstants.borderDark : AppConstants.borderLight),
+              width: 1.2,
             ),
+            boxShadow: _isHovered 
+                ? [
+                    BoxShadow(
+                      color: theme.primaryColor.withOpacity(0.08),
+                      blurRadius: 20,
+                      spreadRadius: 1,
+                      offset: const Offset(0, 8),
+                    )
+                  ]
+                : [],
           ),
-          const SizedBox(height: 24),
-          Text(
-            data["author"]!,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(
+                    Icons.format_quote, 
+                    color: _isHovered ? theme.primaryColor : theme.primaryColor.withOpacity(0.5), 
+                    size: 36,
+                  ),
+                  AnimatedOpacity(
+                    duration: const Duration(milliseconds: 200),
+                    opacity: _isHovered ? 1.0 : 0.4,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "View Profile ",
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: _isHovered ? theme.primaryColor : theme.textTheme.bodySmall?.color,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        FaIcon(
+                          FontAwesomeIcons.linkedin,
+                          color: _isHovered ? theme.primaryColor : theme.textTheme.bodySmall?.color,
+                          size: 14,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Text(
+                widget.data["quote"]!,
+                style: const TextStyle(
+                  fontSize: 14,
+                  height: 1.6,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                widget.data["author"]!,
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                widget.data["role"]!,
+                style: TextStyle(fontSize: 12, color: theme.primaryColor),
+              ),
+            ],
           ),
-          const SizedBox(height: 2),
-          Text(
-            data["role"]!,
-            style: TextStyle(fontSize: 12, color: theme.primaryColor),
-          ),
-        ],
+        ),
       ),
     );
   }
