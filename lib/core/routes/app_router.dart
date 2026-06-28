@@ -8,6 +8,7 @@ import '../../features/experience/presentation/pages/experience_page.dart';
 import '../../features/projects/presentation/pages/projects_page.dart';
 import '../../features/achievements/presentation/pages/achievements_page.dart';
 import '../../features/contact/presentation/pages/contact_page.dart';
+import '../../features/projects/presentation/pages/editor.dart';
 
 class AppRouter {
   static final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -84,6 +85,11 @@ class AppRouter {
             ),
           ),
         ],
+      ),
+      GoRoute(
+        path: '/editor',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const CustomHTMLEditorScreen(),
       ),
     ],
   );

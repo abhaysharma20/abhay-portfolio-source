@@ -5,6 +5,8 @@ import 'core/theme/app_theme.dart';
 import 'core/routes/app_router.dart';
 import 'core/providers/theme_provider.dart';
 import 'core/providers/contact_provider.dart';
+import 'providers/journaling_provider.dart';
+import 'providers/date_time_picker_provider.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -24,6 +26,8 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => ContactProvider()),
+        ChangeNotifierProvider(create: (_) => JournalingProvider()),
+        ChangeNotifierProvider(create: (_) => DateTimePickerProvider()),
       ],
       child: const MyApp(),
     ),

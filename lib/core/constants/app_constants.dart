@@ -7,7 +7,7 @@ class AppConstants {
   static const String subTitle =
       "Senior Flutter Developer • Cross-Platform Mobile • Python Backend";
 
-  static const String email =  "sharmaabhayagra@gmail.com";
+  static const String email = "sharmaabhayagra@gmail.com";
   static const String phone = "+91 7895003405";
   static const String adminEmail = "sharmaabhayagra@gmail.com";
   static const String location = "Greater Noida, India";
@@ -113,7 +113,10 @@ class AppConstants {
       "period": "Oct 2021 - Mar 2024",
       "description":
           "Developed dynamic mobile clients and backend REST microservices.",
-      "domains": ["Social Media Platforms (Nobelpage)", "On-Demand Services (Workerpool)"],
+      "domains": [
+        "Social Media Platforms (Nobelpage)",
+        "On-Demand Services (Workerpool)"
+      ],
       "points": [
         "Built responsive feeds and integrated WebSockets in Nobelpage for real-time chatting.",
         "Developed Node.js-based backend APIs for user authentication, booking scheduling, and state aggregation.",
@@ -136,13 +139,12 @@ class AppConstants {
     }
   ];
 
-  // Featured Projects list
   static const List<Map<String, dynamic>> projects = [
     {
       "id": "journaling",
       "title": "Chronal - Journaling App",
       "desc":
-          "A technically complex, rich editor application featuring local offline database replication, rich-text styling, HTML rendering, and auto-save.",
+          "A highly advanced, technically complex digital journaling platform featuring rich-text HTML rendering, responsive formatting, and a custom WYSIWYG editor. Chronal supports secure local draft versioning and offline-first database synchronization using Hive and SQLite queues. Users can seamlessly embed media, upload and resize images, apply custom paragraph styling block layouts, and auto-save drafts locally, ensuring data integrity even during offline sessions.",
       "isHighlighted": true,
       "features": [
         "Custom HTML Editor with rich formatting options",
@@ -165,7 +167,7 @@ class AppConstants {
       "id": "fintech",
       "title": "Frenn Microfinance App",
       "desc":
-          "A production-grade financial hub featuring biometric authentication, real-time transaction history, graphical wallets, and push notifications.",
+          "A production-grade microfinance and mobile banking hub designed to deliver secure, real-time financial services. Features high-grade biometric authentication (FaceID/TouchID), instant cash graphical wallets, and integration with Stripe for transaction processing. The app enables comprehensive Buy Now Pay Later (BNPL) options, mobile airtime recharges, and real-time transaction tracking with PDF receipt generation, all built on a robust caching repository architecture.",
       "isHighlighted": false,
       "features": [
         "Encrypted biometrics and OAuth 2.0 security protocols",
@@ -174,19 +176,28 @@ class AppConstants {
         "Interactive dashboard analytics with smooth chart transitions",
         "Optimized data querying with Repository pattern caching"
       ],
-      "tech": ["Flutter", "REST APIs", "Firebase", "Stripe", "Local Auth"]
+      "tech": [
+        "Flutter",
+        "REST APIs",
+        "Firebase",
+        "Paymob",
+        "Local Auth",
+        "In-App Purchases"
+      ]
     },
     {
       "id": "nobelpage",
       "title": "Nobelpage",
       "desc":
-          "A professional social media application similar to LinkedIn, developed with Flutter and a Node.js backend. Features WebSockets for real-time chat.",
+          "A production-grade, highly engaging professional networking and social media ecosystem reminiscent of LinkedIn. Designed with a robust Node.js backend and modular Flutter architecture, Nobelpage empowers users to build professional networks, create dedicated organization pages for institutions and companies, and access exclusive premium tiers. The ecosystem is fully equipped with secure App Store and Play Store in-app purchases (IAP) for subscriptions, membership paywalls, gated content access, and real-time WebSocket communication.",
       "isHighlighted": false,
       "features": [
-        "Infinite scrolling paginated feed with smart media caching",
-        "Real-time direct and group chatting with WebSockets and typing status indicators",
-        "User profile customisation, professional network connections, and post interactions",
-        "Robust Node.js backend APIs managing feed generation, comments, and connection state"
+        "In-App Purchases (IAP) integration via Google Play Billing & Apple StoreKit for premium tier subscriptions",
+        "Membership ecosystem featuring paywalled premium feeds, gated connection requests, and exclusive job postings",
+        "User-created custom business, company, and educational institution organization pages",
+        "Real-time direct and group chatting with WebSockets and dynamic typing status indicators",
+        "Infinite scrolling paginated content feed with smart client-side media caching",
+        "Robust Node.js backend API architecture managing real-time feed curation, comments, and security states"
       ],
       "tech": ["Flutter", "Node.js", "WebSockets", "Express", "MongoDB"]
     },
@@ -194,7 +205,7 @@ class AppConstants {
       "id": "restaurant",
       "title": "Restridvisor - Restaurant Management App",
       "desc":
-          "A comprehensive booking and order tracking platform tailored for dual customer-merchant operations.",
+          "A feature-rich, dual-sided restaurant booking and live order management ecosystem designed to coordinate customer-to-merchant operations. Equipped with a real-time reservation coordinator calendar, interactive digital menu configurations, and multi-vendor checkout setups. Merchants benefit from instant kitchen order ticket queue tracking and analytics dashboards, while customers enjoy live dispatch updates and reviews submission flows.",
       "isHighlighted": false,
       "features": [
         "Real-time table booking calendar and reservation coordinator",
@@ -203,13 +214,13 @@ class AppConstants {
         "Aggregated review analysis and statistics dashboard",
         "Multi-vendor payments setup"
       ],
-      "tech": ["Flutter", "Python Backend", "SQL database", "Push Notification"]
+      "tech": ["Flutter", "SQL database", "Push Notification"]
     },
     {
       "id": "workerpool",
       "title": "Workerpool",
       "desc":
-          "An on-demand home services platform built like Urban Company, developed with Flutter and a Node.js backend.",
+          "An on-demand home services marketplace and coordinator dashboard built like Urban Company. Powered by a Node.js backend and MongoDB database, the platform features a responsive time-slot reservation calendar, dynamic category browsing, and an interactive service provider cockpit to track bookings and payouts. Seamlessly integrates Stripe checkout for secure payments, alongside automated invoice generation for completed tasks.",
       "isHighlighted": false,
       "features": [
         "Time slot reservation matrix with calendar integration",
@@ -219,20 +230,43 @@ class AppConstants {
       ],
       "tech": ["Flutter", "Node.js", "Express", "MongoDB", "REST APIs"]
     },
+    // {
+    //   "id": "the_teachers_app",
+    //   "title": "The Teacher App",
+    //   "desc":
+    //       "A comprehensive digital ecosystem developed for the Bharti Airtel Foundation in collaboration with the CK-12 Foundation to empower K-12 educators across India. The app integrates over 45 AI-enabled productivity tools to assist teachers with automatic lesson planning, dynamic classroom content creation, and pedagogy support. Educators have access to NEP 2020-aligned training modules, digital course catalogs, a Teachers' Lounge community hub for peer networking, and live webinars.",
+    //   "isHighlighted": false,
+    //   "features": [
+    //     "45+ AI-enabled tools to assist teachers with lesson planning, content creation, and classroom management",
+    //     "Vast, NEP 2020-aligned content library for Classes 1 to 12 containing courses, videos, podcasts, and question banks",
+    //     "Structured professional development courses including Foundational Literacy & Numeracy (FLN) and pedagogy modules",
+    //     "Teachers' Lounge community hub for networking, sharing creative strategies, and peer collaboration",
+    //     "Interactive engagement formats including quizzes, polls, webinars, and national-level competitions"
+    //   ],
+    //   "tech": ["Flutter", "Dart", "Firebase", "AI Integration", "REST APIs"]
+    // },
     {
-      "id": "the_teachers_app",
-      "title": "The Teacher App",
+      "id": "trimly",
+      "title": "Trimly - Salon & Stylist Booking App",
       "desc":
-          "A comprehensive professional development and classroom companion platform developed for the Bharti Airtel Foundation in collaboration with the CK-12 Foundation, empowering K-12 educators across India.",
+          "A feature-rich, dual-sided salon onboarding and client booking ecosystem consisting of dedicated Salon Management and Customer apps. Trimly streamlines operations by allowing salons to onboard staff, configure service catalogs, and assign custom stylist tiers (including Super Stylists and Stylists). Salons can launch dynamic time- or service-based promotional offers, while configuring flexible loyalty program rules. On the customer side, users can browse services, apply active offers, pick their preferred stylist, schedule time slots, and earn loyalty points redeemable as partial payment for future bookings.",
       "isHighlighted": false,
       "features": [
-        "45+ AI-enabled tools to assist teachers with lesson planning, content creation, and classroom management",
-        "Vast, NEP 2020-aligned content library for Classes 1 to 12 containing courses, videos, podcasts, and question banks",
-        "Structured professional development courses including Foundational Literacy & Numeracy (FLN) and pedagogy modules",
-        "Teachers' Lounge community hub for networking, sharing creative strategies, and peer collaboration",
-        "Interactive engagement formats including quizzes, polls, webinars, and national-level competitions"
+        "Dual-app architecture separating Merchant Salon operations from the Consumer client booking flows",
+        "Advanced staff management enabling salons to onboard stylists, assign tiers (Stylist vs. Super Stylist), and manage schedules",
+        "Flexible promotional engine supporting time-constrained and service-specific discount offers",
+        "Interactive client booking interface for custom stylist selection, service bundling, and date/time scheduling",
+        "Customizable Loyalty Program allowing salons to define earning rules and enabling clients to redeem points as partial payment",
+        "Stripe-powered checkout with real-time appointment reminders and digital receipts"
       ],
-      "tech": ["Flutter", "Dart", "Firebase", "AI Integration", "REST APIs"]
+      "tech": [
+        "Flutter",
+        "Node.js",
+        "Express",
+        "MongoDB",
+        "REST APIs",
+        "Stripe"
+      ]
     }
   ];
 
@@ -240,21 +274,21 @@ class AppConstants {
   static const List<Map<String, String>> testimonials = [
     {
       "quote":
-          "Abhay is a highly skilled Flutter engineer. He transformed our complex Figma design into a pixel-perfect, highly responsive web dashboard with incredibly smooth transitions. Absolutely top-tier work.",
-      "author": "Marcus Vance",
-      "role": "Product Director, PayStream FinTech"
+          "It was a pleasure collaborating closely on difficult assignments with Abhay. He epitomizes what it means to be a very great and helpful senior who goes above and beyond to mentor and assist peers. Abhay is a superb worker who pays close attention to detail and has a thorough understanding of Flutter. His commitment and knowledge made a big difference in our team's accomplishments.",
+      "author": "Yash Dubey",
+      "role": "Software Developer"
     },
     {
       "quote":
-          "Working with Abhay on our journaling editor was a masterclass in clean architecture. He tackled custom HTML parsing, rich-text rendering, and local-first data sync with impressive engineering detail.",
-      "author": "Elena Rostova",
-      "role": "CTO, MindShare Digital"
+          "Abhay is the kind of colleague every team wishes for—skilled, supportive, and always bringing a positive vibe to the workspace. I’ve seen him tackle challenges head-on and come up with smart, scalable solutions time and again. It’s been a blast working alongside him, and I’ve learned a lot from his approach to both tech and teamwork.",
+      "author": "Rishabh Tripathi",
+      "role": "Software Developer"
     },
     {
       "quote":
-          "The Fastlane and CI/CD pipelines Abhay set up completely streamlined our deployment process. His Python backend knowledge makes him a rare, complete engineer who understands how both mobile and server environments behave.",
-      "author": "Srinivas Rao",
-      "role": "Lead Architect, CloudScale Tech"
+          "We have worked on a mobile application project  Abhay was the lead mobile developer in that project he was leading the mobile development .....his calmness is something to admire his sincerity towards his work is commendable , wish you best of luck for your future endeavour.",
+      "author": "Sunny Jha",
+      "role": "Product Manager"
     }
   ];
 }
