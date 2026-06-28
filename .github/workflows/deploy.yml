@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - source
+      - main
 
 permissions:
   contents: write
@@ -35,8 +36,10 @@ jobs:
       - name: Build Web
         run: flutter build web --release --base-href "/"
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy to External Public Repository
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: build/web
+          token: ${{ secrets.DEPLOY_TOKEN }}
+          repository-name: abhaysharma20/abhaysharma20.github.io
           branch: main
+          folder: build/web
