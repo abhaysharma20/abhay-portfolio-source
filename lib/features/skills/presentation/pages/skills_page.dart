@@ -23,20 +23,50 @@ class _SkillsPageState extends State<SkillsPage> {
   // Generate skills with competency mapping (mock levels for aesthetic detail)
   List<Map<String, dynamic>> _getFilteredSkills() {
     final List<Map<String, dynamic>> allSkillsList = [];
-    
+
     // Map competency levels to mock progress values
     final Map<String, double> skillLevels = {
-      "Flutter": 0.95, "Dart": 0.95, "React Native": 0.75, "Kotlin": 0.70,
-      "Python": 0.85, "REST APIs": 0.90, "Firebase": 0.90, "Authentication": 0.88, "JSON": 0.95,
-      "Clean Architecture": 0.95, "MVVM": 0.90, "Repository Pattern": 0.90, "Dependency Injection": 0.88,
-      "GetX": 0.85, "Provider": 0.92, "BLoC": 0.90,
-      "Hive": 0.85, "SQLite": 0.82, "Firebase Firestore": 0.90, "Shared Preferences": 0.95,
-      "Android Studio": 0.90, "VS Code": 0.92, "Git": 0.88, "GitHub": 0.90, "Figma": 0.78, "Postman": 0.88,
-      "Fastlane": 0.85, "GitHub Actions": 0.80,
-      "Responsive Design": 0.95, "Material Design": 0.92, "Custom Paint": 0.85, "Custom Animations": 0.90,
-      "Hero Animations": 0.92, "Implicit & Explicit Animations": 0.90,
-      "Payment Gateway": 0.85, "Push Notifications": 0.88, "Google Maps": 0.85, "Camera": 0.80,
-      "Location": 0.82, "Deep Linking": 0.85, "Social Login": 0.88
+      "Flutter": 0.95,
+      "Dart": 0.95,
+      "React Native": 0.75,
+      "Kotlin": 0.70,
+      "Python": 0.85,
+      "REST APIs": 0.90,
+      "Firebase": 0.90,
+      "Authentication": 0.88,
+      "JSON": 0.95,
+      "Clean Architecture": 0.95,
+      "MVVM": 0.90,
+      "Repository Pattern": 0.90,
+      "Dependency Injection": 0.88,
+      "GetX": 0.85,
+      "Provider": 0.92,
+      "BLoC": 0.90,
+      "Hive": 0.85,
+      "SQLite": 0.82,
+      "Firebase Firestore": 0.90,
+      "Shared Preferences": 0.95,
+      "Android Studio": 0.90,
+      "VS Code": 0.92,
+      "Git": 0.88,
+      "GitHub": 0.90,
+      "Figma": 0.78,
+      "Postman": 0.88,
+      "Fastlane": 0.85,
+      "GitHub Actions": 0.80,
+      "Responsive Design": 0.95,
+      "Material Design": 0.92,
+      "Custom Paint": 0.85,
+      "Custom Animations": 0.90,
+      "Hero Animations": 0.92,
+      "Implicit & Explicit Animations": 0.90,
+      "Payment Gateway": 0.85,
+      "Push Notifications": 0.88,
+      "Google Maps": 0.85,
+      "Camera": 0.80,
+      "Location": 0.82,
+      "Deep Linking": 0.85,
+      "Social Login": 0.88
     };
 
     AppConstants.skills.forEach((category, list) {
@@ -51,8 +81,12 @@ class _SkillsPageState extends State<SkillsPage> {
     });
 
     return allSkillsList.where((skill) {
-      final matchesCategory = _selectedCategory == "All" || skill["category"] == _selectedCategory;
-      final matchesSearch = skill["name"].toString().toLowerCase().contains(_searchQuery.toLowerCase());
+      final matchesCategory =
+          _selectedCategory == "All" || skill["category"] == _selectedCategory;
+      final matchesSearch = skill["name"]
+          .toString()
+          .toLowerCase()
+          .contains(_searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
     }).toList();
   }
@@ -92,7 +126,7 @@ class _SkillsPageState extends State<SkillsPage> {
                   borderRadius: BorderRadius.circular(2),
                 ),
               ).animate().fadeIn(delay: 150.ms).scaleX(begin: 0),
-              
+
               const SizedBox(height: 48),
 
               // Search & Filters Panel
@@ -105,10 +139,15 @@ class _SkillsPageState extends State<SkillsPage> {
                       ],
                     )
                   : Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(flex: 3, child: _buildSearchBar(context, isDark)),
+                        Expanded(
+                            flex: 3, child: _buildSearchBar(context, isDark)),
                         const SizedBox(width: 32),
-                        Expanded(flex: 7, child: _buildCategoryTabs(context, categories, isDark)),
+                        Expanded(
+                            flex: 7,
+                            child: _buildCategoryTabs(
+                                context, categories, isDark)),
                       ],
                     ),
 
@@ -127,11 +166,13 @@ class _SkillsPageState extends State<SkillsPage> {
                     )
                   : LayoutBuilder(
                       builder: (context, constraints) {
-                        final gridColumns = width > 1000 ? 4 : (width > 700 ? 3 : 2);
+                        final gridColumns =
+                            width > 1000 ? 4 : (width > 700 ? 3 : 2);
                         return GridView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: gridColumns,
                             crossAxisSpacing: 16,
                             mainAxisSpacing: 16,
@@ -159,7 +200,7 @@ class _SkillsPageState extends State<SkillsPage> {
 
   Widget _buildSearchBar(BuildContext context, bool isDark) {
     final theme = Theme.of(context);
-    
+
     return TextField(
       controller: _searchController,
       onChanged: (val) {
@@ -169,7 +210,8 @@ class _SkillsPageState extends State<SkillsPage> {
       },
       decoration: InputDecoration(
         hintText: "Search skills (e.g. BLoC, FastAPI)...",
-        prefixIcon: Icon(Icons.search, color: theme.iconTheme.color?.withOpacity(0.5)),
+        prefixIcon:
+            Icon(Icons.search, color: theme.iconTheme.color?.withOpacity(0.5)),
         suffixIcon: _searchQuery.isNotEmpty
             ? IconButton(
                 icon: const Icon(Icons.clear),
@@ -185,53 +227,65 @@ class _SkillsPageState extends State<SkillsPage> {
     );
   }
 
-  Widget _buildCategoryTabs(BuildContext context, List<String> categories, bool isDark) {
+  Widget _buildCategoryTabs(
+      BuildContext context, List<String> categories, bool isDark) {
     final theme = Theme.of(context);
-    
-    return SizedBox(
-      height: 50,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: categories.length,
-        itemBuilder: (context, index) {
-          final cat = categories[index];
-          final isSelected = _selectedCategory == cat;
-          
-          return Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: ChoiceChip(
-              label: Text(
-                cat,
-                style: TextStyle(
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  color: isSelected 
-                      ? (isDark ? Colors.black : Colors.white)
-                      : (isDark ? Colors.white70 : Colors.black87),
-                ),
-              ),
-              selected: isSelected,
-              onSelected: (selected) {
-                if (selected) {
-                  setState(() {
-                    _selectedCategory = cat;
-                  });
-                }
-              },
-              selectedColor: theme.primaryColor,
-              backgroundColor: isDark ? AppConstants.cardDark : AppConstants.cardLight,
-              checkmarkColor: isDark ? Colors.black : Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-                side: BorderSide(
-                  color: isSelected 
-                      ? theme.primaryColor 
-                      : (isDark ? AppConstants.borderDark : AppConstants.borderLight),
-                ),
+    final width = MediaQuery.of(context).size.width;
+
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: width > 850 ? 180 : 130,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
+        childAspectRatio: width > 850 ? 3.5 : 2.8,
+      ),
+      itemCount: categories.length,
+      itemBuilder: (context, index) {
+        final cat = categories[index];
+        final isSelected = _selectedCategory == cat;
+
+        return ChoiceChip(
+          label: Center(
+            child: Text(
+              cat,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: width > 850 ? 12 : 11,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                color: isSelected
+                    ? (isDark ? Colors.black : Colors.white)
+                    : (isDark ? Colors.white70 : Colors.black87),
               ),
             ),
-          );
-        },
-      ),
+          ),
+          selected: isSelected,
+          onSelected: (selected) {
+            if (selected) {
+              setState(() {
+                _selectedCategory = cat;
+              });
+            }
+          },
+          selectedColor: theme.primaryColor,
+          backgroundColor:
+              isDark ? AppConstants.cardDark : AppConstants.cardLight,
+          checkmarkColor: isDark ? Colors.black : Colors.white,
+          showCheckmark: false,
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(
+              color: isSelected
+                  ? theme.primaryColor
+                  : (isDark
+                      ? AppConstants.borderDark
+                      : AppConstants.borderLight),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -252,7 +306,8 @@ class SkillCard extends StatefulWidget {
   State<SkillCard> createState() => _SkillCardState();
 }
 
-class _SkillCardState extends State<SkillCard> with SingleTickerProviderStateMixin {
+class _SkillCardState extends State<SkillCard>
+    with SingleTickerProviderStateMixin {
   bool _isHovered = false;
   late AnimationController _progressController;
   late Animation<double> _progressAnimation;
@@ -290,17 +345,21 @@ class _SkillCardState extends State<SkillCard> with SingleTickerProviderStateMix
         duration: const Duration(milliseconds: 250),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isDark 
-              ? (_isHovered ? Colors.white.withOpacity(0.02) : AppConstants.cardDark)
-              : (_isHovered ? Colors.black.withOpacity(0.01) : AppConstants.cardLight),
+          color: isDark
+              ? (_isHovered
+                  ? Colors.white.withOpacity(0.02)
+                  : AppConstants.cardDark)
+              : (_isHovered
+                  ? Colors.black.withOpacity(0.01)
+                  : AppConstants.cardLight),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: _isHovered 
-                ? theme.primaryColor.withOpacity(0.5) 
+            color: _isHovered
+                ? theme.primaryColor.withOpacity(0.5)
                 : (isDark ? AppConstants.borderDark : AppConstants.borderLight),
             width: 1.2,
           ),
-          boxShadow: _isHovered 
+          boxShadow: _isHovered
               ? [
                   BoxShadow(
                     color: theme.primaryColor.withOpacity(0.06),
@@ -335,7 +394,7 @@ class _SkillCardState extends State<SkillCard> with SingleTickerProviderStateMix
                 ),
               ],
             ),
-            
+
             // Animated Progress Indicator
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -364,9 +423,13 @@ class _SkillCardState extends State<SkillCard> with SingleTickerProviderStateMix
                     return LinearProgressIndicator(
                       value: _progressAnimation.value,
                       minHeight: 4,
-                      backgroundColor: isDark ? Colors.white.withOpacity(0.06) : Colors.black.withOpacity(0.06),
+                      backgroundColor: isDark
+                          ? Colors.white.withOpacity(0.06)
+                          : Colors.black.withOpacity(0.06),
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        _isHovered ? theme.primaryColor : theme.primaryColor.withOpacity(0.85),
+                        _isHovered
+                            ? theme.primaryColor
+                            : theme.primaryColor.withOpacity(0.85),
                       ),
                       borderRadius: BorderRadius.circular(2),
                     );

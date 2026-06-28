@@ -12,13 +12,12 @@ class AppConstants {
   static const String adminEmail = "sharmaabhayagra@gmail.com";
   static const String location = "Greater Noida, India";
 
-  // Dummy Resume URL - will be updated later
   static const String resumeUrl =
-      "https://drive.google.com/file/d/1DummyResumeLink/view?usp=sharing";
+      "https://drive.google.com/file/d/1wAtyKDNrrO1_B6aQS4iXM6sCrNOL66Vg/view?usp=sharing";
 
-  static const String github = "https://github.com/abhay";
-  static const String linkedin = "https://linkedin.com/in/abhay";
-  static const String whatsapp = "https://wa.me/919876543210";
+  static const String github = "https://github.com/abhaysharma20";
+  static const String linkedin = "https://www.linkedin.com/in/abhaysharma20/";
+  static const String whatsapp = "https://wa.me/917895003405";
 
   // Brand colors
   static const Color primaryColor = Color(0xFF00E5FF); // Neon Cyan
