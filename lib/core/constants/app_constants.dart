@@ -18,7 +18,6 @@ class AppConstants {
 
   static const String github = "https://github.com/abhaysharma20";
   static const String linkedin = "https://www.linkedin.com/in/abhaysharma20/";
-  static const String whatsapp = "https://wa.me/917895003405";
 
   // Brand colors
   static const Color primaryColor = Color(0xFF00E5FF); // Neon Cyan

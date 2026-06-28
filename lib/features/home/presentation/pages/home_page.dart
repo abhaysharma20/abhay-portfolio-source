@@ -171,7 +171,6 @@ class HomePage extends StatelessWidget {
           children: [
             _socialIcon(FontAwesomeIcons.github, () => _launchURL(AppConstants.github), "GitHub"),
             _socialIcon(FontAwesomeIcons.linkedin, () => _launchURL(AppConstants.linkedin), "LinkedIn"),
-            _socialIcon(FontAwesomeIcons.whatsapp, () => _launchURL(AppConstants.whatsapp), "WhatsApp"),
           ],
         ).animate().fadeIn(delay: 800.ms, duration: 500.ms),
       ],

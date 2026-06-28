@@ -121,9 +121,9 @@ class _ContactPageState extends State<ContactPage> {
         _infoBlock(
           context,
           icon: Icons.phone_android,
-          title: "Phone & WhatsApp",
+          title: "Phone",
           value: AppConstants.phone,
-          onTap: () => _launchURL(AppConstants.whatsapp),
+          onTap: () => _launchURL("tel:${AppConstants.phone}"),
         ),
         _infoBlock(
           context,
