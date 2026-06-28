@@ -17,11 +17,7 @@ class FirebaseService {
     required String message,
     required String deviceId,
   }) async {
-    await _firestore
-        .collection('portfolio')
-        .doc('portfolio')
-        .collection('user-messages')
-        .add({
+    await _firestore.collection('user-messages').add({
       'name': name,
       'email': email,
       'message': message,
@@ -32,8 +28,6 @@ class FirebaseService {
 
   Stream<QuerySnapshot> getResponses() {
     return _firestore
-        .collection('portfolio')
-        .doc('portfolio')
         .collection('user-messages')
         .orderBy('timestamp', descending: true)
         .snapshots();
