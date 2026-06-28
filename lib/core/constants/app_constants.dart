@@ -84,6 +84,12 @@ class AppConstants {
       "Deep Linking",
       "Social Login"
     ],
+    "Payments & Billing": [
+      "Stripe",
+      "Paymob",
+      "Razorpay",
+      "In-App Purchases (IAP)"
+    ],
   };
 
   // Experience timeline details
