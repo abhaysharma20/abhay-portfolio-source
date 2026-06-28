@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart' show Firebase;
 import 'package:flutter/services.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/services/firebase_service.dart';
@@ -38,7 +39,10 @@ class _MessagesPageState extends State<MessagesPage> {
 
       try {
         // Fetch credentials from Firestore for secure cloud-based validation
-        final doc = await FirebaseFirestore.instance
+        final doc = await FirebaseFirestore.instanceFor(
+          app: Firebase.app(),
+          databaseId: 'default',
+        )
             .collection('credentials')
             .doc('credentials')
             .get();
