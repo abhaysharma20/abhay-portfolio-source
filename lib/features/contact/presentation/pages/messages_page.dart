@@ -274,7 +274,7 @@ class _MessagesPageState extends State<MessagesPage> {
                   final data = docs[index].data() as Map<String, dynamic>;
                   final name = data['name'] ?? 'Anonymous';
                   final email = data['email'] ?? 'No email';
-                  final message = data['message'] ?? '';
+                  final message = data['message'] ?? data['messahe'] ?? '';
                   final timestampField = data['timestamp'];
                   
                   String timeStr = 'N/A';
