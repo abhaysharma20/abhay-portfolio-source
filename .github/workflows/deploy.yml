@@ -32,6 +32,10 @@ jobs:
       - name: Get Dependencies
         run: flutter pub get
 
+      - name: Update Version Code
+        run: |
+          sed -i 's/static const String appVersion = "[^"]*";/static const String appVersion = "1.3.${{ github.run_number }}";/g' lib/core/constants/app_constants.dart
+
       - name: Build Web
         run: flutter build web --release --base-href "/"
 

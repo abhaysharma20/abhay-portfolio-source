@@ -116,6 +116,16 @@ class AchievementsPage extends StatelessWidget {
 
               const SizedBox(height: 80),
 
+              // Certifications Section
+              Text(
+                "LICENSES & CERTIFICATIONS",
+                style: theme.textTheme.displaySmall?.copyWith(fontSize: 28),
+              ),
+              const SizedBox(height: 24),
+              _buildCertificationsList(context, isDark, isMobile),
+
+              const SizedBox(height: 80),
+
               // Testimonials Section
               Text(
                 "RECOMMENDATIONS",
@@ -152,6 +162,50 @@ class AchievementsPage extends StatelessWidget {
               child: TestimonialCard(data: t, isDark: isDark),
             ),
           )).toList(),
+        );
+      },
+    );
+  }
+
+  Widget _buildCertificationsList(BuildContext context, bool isDark, bool isMobile) {
+    final certs = [
+      {
+        "title": "Deep Learning Certification",
+        "authority": "Udemy",
+        "url": "https://www.udemy.com/certificate/UC-a2443ed0-f5a7-4fe4-87fc-a98ac086509a/",
+        "icon": Icons.psychology_outlined,
+      },
+      {
+        "title": "Flutter Development Certification",
+        "authority": "Udemy",
+        "url": "https://www.udemy.com/certificate/UC-c7a4765b-8b99-41e4-95ee-6be9711e4220/",
+        "icon": Icons.phone_android_outlined,
+      },
+    ];
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final gridCols = isMobile ? 1 : 2;
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: gridCols,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: isMobile ? 3.4 : 4.2,
+          ),
+          itemCount: certs.length,
+          itemBuilder: (context, index) {
+            final cert = certs[index];
+            return CertificationCard(
+              title: cert["title"] as String,
+              authority: cert["authority"] as String,
+              url: cert["url"] as String,
+              icon: cert["icon"] as IconData,
+              isDark: isDark,
+            );
+          },
         );
       },
     );
@@ -406,5 +460,125 @@ class _AchievementCardState extends State<AchievementCard> with SingleTickerProv
         ),
       ),
     ).animate().fadeIn(delay: (widget.index * 150).ms).slideY(begin: 0.1);
+  }
+}
+
+class CertificationCard extends StatefulWidget {
+  final String title;
+  final String authority;
+  final String url;
+  final IconData icon;
+  final bool isDark;
+
+  const CertificationCard({
+    super.key,
+    required this.title,
+    required this.authority,
+    required this.url,
+    required this.icon,
+    required this.isDark,
+  });
+
+  @override
+  State<CertificationCard> createState() => _CertificationCardState();
+}
+
+class _CertificationCardState extends State<CertificationCard> {
+  bool _isHovered = false;
+
+  Future<void> _launchURL(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () => _launchURL(widget.url),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOutCubic,
+          padding: const EdgeInsets.all(16),
+          transform: Matrix4.translationValues(0, _isHovered ? -4 : 0, 0),
+          decoration: BoxDecoration(
+            color: widget.isDark
+                ? (_isHovered ? Colors.white.withOpacity(0.02) : AppConstants.cardDark)
+                : (_isHovered ? Colors.black.withOpacity(0.01) : AppConstants.cardLight),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: _isHovered
+                  ? theme.primaryColor.withOpacity(0.6)
+                  : (widget.isDark ? AppConstants.borderDark : AppConstants.borderLight),
+              width: 1.2,
+            ),
+            boxShadow: _isHovered
+                ? [
+                    BoxShadow(
+                      color: theme.primaryColor.withOpacity(0.06),
+                      blurRadius: 16,
+                      spreadRadius: 1,
+                      offset: const Offset(0, 6),
+                    )
+                  ]
+                : [],
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: theme.primaryColor.withOpacity(0.06),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  widget.icon,
+                  color: _isHovered ? theme.primaryColor : theme.primaryColor.withOpacity(0.6),
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.title,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      widget.authority,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: theme.colorScheme.onSurface.withOpacity(0.6),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                size: 14,
+                color: theme.colorScheme.onSurface.withOpacity(0.3),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
