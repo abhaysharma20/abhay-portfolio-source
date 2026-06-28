@@ -11,6 +11,7 @@ class AppConstants {
   static const String phone = "+91 7895003405";
   static const String adminEmail = "sharmaabhayagra@gmail.com";
   static const String location = "Greater Noida, India";
+  static const String appVersion = "1.3.0";
 
   static const String resumeUrl =
       "https://drive.google.com/file/d/1wAtyKDNrrO1_B6aQS4iXM6sCrNOL66Vg/view?usp=sharing";

@@ -75,6 +75,17 @@ class _ContactPageState extends State<ContactPage> {
                         Expanded(flex: 4, child: _buildContactForm(context, isDark)),
                       ],
                     ),
+              const SizedBox(height: 60),
+              Center(
+                child: Text(
+                  "Version ${AppConstants.appVersion}",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onSurface.withOpacity(0.4),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
