@@ -118,13 +118,13 @@ class _ContactPageState extends State<ContactPage> {
           value: AppConstants.email,
           onTap: () => _launchURL("mailto:${AppConstants.email}"),
         ),
-        _infoBlock(
-          context,
-          icon: Icons.phone_android,
-          title: "Phone",
-          value: AppConstants.phone,
-          onTap: () => _launchURL("tel:${AppConstants.phone}"),
-        ),
+        // _infoBlock(
+        //   context,
+        //   icon: Icons.phone_android,
+        //   title: "Phone",
+        //   value: AppConstants.phone,
+        //   onTap: () => _launchURL("tel:${AppConstants.phone}"),
+        // ),
         _infoBlock(
           context,
           icon: Icons.location_on_outlined,
