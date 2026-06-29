@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/constants/pub_packages.dart';
 
 class AchievementsPage extends StatelessWidget {
   const AchievementsPage({super.key});
@@ -126,6 +127,21 @@ class AchievementsPage extends StatelessWidget {
 
               const SizedBox(height: 80),
 
+              // Open Source Packages Section
+              Text(
+                "OPEN SOURCE PACKAGES",
+                style: theme.textTheme.displaySmall?.copyWith(fontSize: 28),
+              ).animate().fadeIn(duration: 400.ms),
+              const SizedBox(height: 8),
+              Text(
+                "Published Flutter & Dart packages on pub.dev.",
+                style: theme.textTheme.bodyLarge,
+              ),
+              const SizedBox(height: 24),
+              _buildPackagesList(context, isDark, isMobile),
+
+              const SizedBox(height: 80),
+
               // Testimonials Section
               Text(
                 "RECOMMENDATIONS",
@@ -139,6 +155,27 @@ class AchievementsPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildPackagesList(BuildContext context, bool isDark, bool isMobile) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Column(
+          children: PubPackages.packages.asMap().entries.map((entry) {
+            final index = entry.key;
+            final pkg = entry.value;
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: PubPackageCard(
+                pkg: pkg,
+                isDark: isDark,
+                index: index,
+              ),
+            );
+          }).toList(),
+        );
+      },
     );
   }
 
@@ -578,6 +615,299 @@ class _CertificationCardState extends State<CertificationCard> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class PubPackageCard extends StatefulWidget {
+  final Map<String, dynamic> pkg;
+  final bool isDark;
+  final int index;
+
+  const PubPackageCard({
+    super.key,
+    required this.pkg,
+    required this.isDark,
+    required this.index,
+  });
+
+  @override
+  State<PubPackageCard> createState() => _PubPackageCardState();
+}
+
+class _PubPackageCardState extends State<PubPackageCard> {
+  bool _isHovered = false;
+
+  Future<void> _launchURL(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final pkg = widget.pkg;
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () => _launchURL(pkg['url'] as String),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOutCubic,
+          transform: Matrix4.translationValues(0, _isHovered ? -4 : 0, 0),
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: widget.isDark
+                ? (_isHovered
+                    ? Colors.white.withOpacity(0.025)
+                    : AppConstants.cardDark)
+                : (_isHovered
+                    ? Colors.black.withOpacity(0.01)
+                    : AppConstants.cardLight),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: _isHovered
+                  ? theme.primaryColor.withOpacity(0.6)
+                  : (widget.isDark
+                      ? AppConstants.borderDark
+                      : AppConstants.borderLight),
+              width: 1.2,
+            ),
+            boxShadow: _isHovered
+                ? [
+                    BoxShadow(
+                      color: theme.primaryColor.withOpacity(0.08),
+                      blurRadius: 24,
+                      spreadRadius: 1,
+                      offset: const Offset(0, 8),
+                    )
+                  ]
+                : [],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Top row: package name + pub.dev badge
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // pub.dev icon
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: theme.primaryColor.withOpacity(0.08),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.extension_rounded,
+                      color: _isHovered
+                          ? theme.primaryColor
+                          : theme.primaryColor.withOpacity(0.6),
+                      size: 22,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                pkg['name'] as String,
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: _isHovered ? theme.primaryColor : null,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF0175C2).withOpacity(0.12),
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: const Color(0xFF0175C2).withOpacity(0.3),
+                                  width: 1,
+                                ),
+                              ),
+                              child: const Text(
+                                'pub.dev',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF0175C2),
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'v${pkg['version']}',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: theme.colorScheme.onSurface.withOpacity(0.5),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  AnimatedOpacity(
+                    duration: const Duration(milliseconds: 200),
+                    opacity: _isHovered ? 1.0 : 0.3,
+                    child: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 14,
+                      color: theme.primaryColor,
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 16),
+
+              // Description
+              Text(
+                pkg['description'] as String,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  height: 1.6,
+                  color: theme.colorScheme.onSurface.withOpacity(0.7),
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+
+              const SizedBox(height: 20),
+
+              // Stats row
+              Wrap(
+                spacing: 12,
+                runSpacing: 8,
+                children: [
+                  _StatChip(
+                    icon: Icons.favorite_rounded,
+                    value: '${pkg['likes']}',
+                    label: 'likes',
+                    color: const Color(0xFFFF4081),
+                    isDark: widget.isDark,
+                  ),
+                  _StatChip(
+                    icon: Icons.stars_rounded,
+                    value: '${pkg['points']}',
+                    label: 'pub points',
+                    color: const Color(0xFFFFD700),
+                    isDark: widget.isDark,
+                  ),
+                  _StatChip(
+                    icon: Icons.download_rounded,
+                    value: '${pkg['downloads']}',
+                    label: 'downloads',
+                    color: theme.primaryColor,
+                    isDark: widget.isDark,
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 16),
+
+              // Tags
+              Wrap(
+                spacing: 8,
+                runSpacing: 6,
+                children: (pkg['tags'] as List<String>).map((tag) {
+                  return Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: theme.primaryColor.withOpacity(0.06),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: theme.primaryColor.withOpacity(0.15),
+                        width: 1,
+                      ),
+                    ),
+                    child: Text(
+                      tag,
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: theme.primaryColor.withOpacity(0.8),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    )
+        .animate()
+        .fadeIn(delay: (widget.index * 100).ms, duration: 400.ms)
+        .slideY(begin: 0.05);
+  }
+}
+
+class _StatChip extends StatelessWidget {
+  final IconData icon;
+  final String value;
+  final String label;
+  final Color color;
+  final bool isDark;
+
+  const _StatChip({
+    required this.icon,
+    required this.value,
+    required this.label,
+    required this.color,
+    required this.isDark,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.07),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: color.withOpacity(0.2), width: 1),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 13, color: color),
+          const SizedBox(width: 5),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+          ),
+          const SizedBox(width: 3),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              color: color.withOpacity(0.7),
+            ),
+          ),
+        ],
       ),
     );
   }
