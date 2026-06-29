@@ -49,8 +49,8 @@ class AppConstants {
   // Quick statistics
   static const List<Map<String, String>> stats = [
     {"value": "5+", "label": "Years Experience"},
-    {"value": "15+", "label": "Production Apps"},
-    {"value": "5+", "label": "Domains Delivered"},
+    {"value": "7+", "label": "Production Apps"},
+    {"value": "4+", "label": "Domains Delivered"},
     {"value": "95%", "label": "CI/CD Automation"},
     {"value": "100%", "label": "Clean Architecture"},
   ];
@@ -251,7 +251,7 @@ class AppConstants {
     //     "Teachers' Lounge community hub for networking, sharing creative strategies, and peer collaboration",
     //     "Interactive engagement formats including quizzes, polls, webinars, and national-level competitions"
     //   ],
-    //   "tech": ["Flutter", "Dart", "Firebase", "AI Integration", "REST APIs"]
+    //   "tech": ["Flutter", "Dart", "Firebase", "AI Integration", "REST APIs","Python"]
     // },
     {
       "id": "trimly",

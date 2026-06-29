@@ -29,10 +29,14 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
       height: 70,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: isDark ? Colors.black.withOpacity(0.4) : Colors.white.withOpacity(0.4),
+        color: isDark
+            ? Colors.black.withOpacity(0.4)
+            : Colors.white.withOpacity(0.4),
         border: Border(
           bottom: BorderSide(
-            color: isDark ? Colors.white.withOpacity(0.05) : Colors.black.withOpacity(0.05),
+            color: isDark
+                ? Colors.white.withOpacity(0.05)
+                : Colors.black.withOpacity(0.05),
             width: 1,
           ),
         ),
@@ -45,47 +49,30 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Logo
+                // ── Logo ───────────────────────────────────────────
                 GestureDetector(
                   onTap: () => context.go('/'),
                   child: MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: Row(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: isDark
-                                  ? [AppConstants.primaryColor, AppConstants.secondaryColor]
-                                  : [AppConstants.secondaryColor, AppConstants.accentColor],
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Text(
-                            "AS",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
+                        _AnimatedLogoWidget(isDark: isDark),
                         const SizedBox(width: 12),
                         Text(
                           "Abhay Sharma",
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: -0.5,
-                            fontSize: 18,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: -0.5,
+                                    fontSize: 18,
+                                  ),
                         ),
                       ],
                     ),
                   ),
                 ),
 
-                // Nav Items (Desktop)
+                // ── Nav Items (Desktop) ─────────────────────────────
                 if (!isMobile)
                   Row(
                     mainAxisSize: MainAxisSize.min,
@@ -100,13 +87,15 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
                     ],
                   ),
 
-                // Actions (Theme toggle & Mobile menu)
+                // ── Actions (Theme toggle & Mobile menu) ────────────
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
                       icon: Icon(
-                        isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
+                        isDark
+                            ? Icons.light_mode_outlined
+                            : Icons.dark_mode_outlined,
                         color: isDark ? Colors.white70 : Colors.black87,
                       ),
                       onPressed: () => themeProvider.toggleTheme(),
@@ -176,6 +165,170 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+// ─── Animated Person-Coding ↔ </> Logo ───────────────────────────────────────
+
+class _AnimatedLogoWidget extends StatefulWidget {
+  final bool isDark;
+  const _AnimatedLogoWidget({required this.isDark});
+
+  @override
+  State<_AnimatedLogoWidget> createState() => _AnimatedLogoWidgetState();
+}
+
+class _AnimatedLogoWidgetState extends State<_AnimatedLogoWidget>
+    with SingleTickerProviderStateMixin {
+  /// true  = person+laptop icon visible
+  /// false = </> code icon visible
+  bool _showPerson = true;
+
+  // Glow pulse controller — only active while </> is shown
+  late final AnimationController _glowCtrl;
+  late final Animation<double> _glowAnim;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _glowCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    )..repeat(reverse: true);
+
+    _glowAnim = Tween<double>(begin: 0.3, end: 1.0).animate(
+      CurvedAnimation(parent: _glowCtrl, curve: Curves.easeInOut),
+    );
+
+    _startLoop();
+  }
+
+  Future<void> _startLoop() async {
+    while (mounted) {
+      await Future.delayed(const Duration(seconds: 3));
+      if (!mounted) return;
+      setState(() => _showPerson = false); // fade to </>
+
+      await Future.delayed(const Duration(seconds: 3));
+      if (!mounted) return;
+      setState(() => _showPerson = true); // fade back to person
+    }
+  }
+
+  @override
+  void dispose() {
+    _glowCtrl.dispose();
+    super.dispose();
+  }
+
+  List<Color> get _colors => widget.isDark
+      ? [AppConstants.primaryColor, AppConstants.secondaryColor]
+      : [AppConstants.secondaryColor, AppConstants.accentColor];
+
+  /// Shared gradient badge shell used by both icons.
+  Widget _badge({required Widget child, bool glow = false}) {
+    return AnimatedBuilder(
+      animation: _glowCtrl,
+      builder: (_, __) {
+        return Container(
+          width: 46,
+          height: 46,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: _colors,
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: (glow && !_showPerson)
+                ? [
+                    BoxShadow(
+                      color: AppConstants.primaryColor
+                          .withOpacity(0.45 * _glowAnim.value),
+                      blurRadius: 18 * _glowAnim.value,
+                      spreadRadius: 1,
+                    ),
+                  ]
+                : [],
+          ),
+          child: child,
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 46,
+      height: 46,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // ── Person + Laptop (coding person icon) ──────────────────
+          AnimatedOpacity(
+            opacity: _showPerson ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+            child: AnimatedScale(
+              scale: _showPerson ? 1.0 : 0.8,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+              child: _badge(
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: const [
+                    Positioned(
+                      top: 6,
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.black,
+                        size: 19,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 5,
+                      child: Icon(
+                        Icons.laptop_mac,
+                        color: Colors.black,
+                        size: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // ── </> Code Icon ─────────────────────────────────────────
+          AnimatedOpacity(
+            opacity: _showPerson ? 0.0 : 1.0,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+            child: AnimatedScale(
+              scale: _showPerson ? 0.8 : 1.0,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+              child: _badge(
+                glow: true,
+                child: const Center(
+                  child: Text(
+                    "</>",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 13,
+                      letterSpacing: 0,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
