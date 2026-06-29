@@ -18,6 +18,7 @@ class AppConstants {
 
   static const String github = "https://github.com/abhaysharma20";
   static const String linkedin = "https://www.linkedin.com/in/abhaysharma20/";
+  static const String youtube = "https://www.youtube.com/channel/UCTFn1zE0UpytgBM0OfRSOgA";
   // static const String whatsapp = "https://wa.me/917895003405";
 
   // Brand colors
