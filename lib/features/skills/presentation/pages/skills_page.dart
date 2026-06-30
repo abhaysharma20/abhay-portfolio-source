@@ -99,7 +99,7 @@ class SkillsPage extends StatefulWidget {
 
 class _SkillsPageState extends State<SkillsPage> {
   final TextEditingController _searchController = TextEditingController();
-  String _selectedCategory = "All";
+  String _selectedCategory = "Mobile Development";
   String _searchQuery = "";
 
   @override
@@ -171,8 +171,7 @@ class _SkillsPageState extends State<SkillsPage> {
     });
 
     return allSkillsList.where((skill) {
-      final matchesCategory =
-          _selectedCategory == "All" || skill["category"] == _selectedCategory;
+      final matchesCategory = skill["category"] == _selectedCategory;
       final matchesSearch = skill["name"]
           .toString()
           .toLowerCase()
@@ -188,7 +187,7 @@ class _SkillsPageState extends State<SkillsPage> {
     final width = MediaQuery.of(context).size.width;
     final isMobile = width < 850;
 
-    final categories = ["All", ...AppConstants.skills.keys];
+    final categories = [...AppConstants.skills.keys];
     final filteredSkills = _getFilteredSkills();
 
     return Padding(
@@ -266,7 +265,7 @@ class _SkillsPageState extends State<SkillsPage> {
                             crossAxisCount: gridColumns,
                             crossAxisSpacing: 16,
                             mainAxisSpacing: 16,
-                            childAspectRatio: 1.35,
+                            childAspectRatio: 1.25,
                           ),
                           itemCount: filteredSkills.length,
                           itemBuilder: (context, index) {
@@ -315,32 +314,20 @@ class _SkillsPageState extends State<SkillsPage> {
     final theme = Theme.of(context);
     final width = MediaQuery.of(context).size.width;
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: width > 850 ? 180 : 130,
-        mainAxisSpacing: 8,
-        crossAxisSpacing: 8,
-        childAspectRatio: width > 850 ? 3.5 : 2.8,
-      ),
-      itemCount: categories.length,
-      itemBuilder: (context, index) {
-        final cat = categories[index];
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: categories.map((cat) {
         final isSelected = _selectedCategory == cat;
-
         return ChoiceChip(
-          label: Center(
-            child: Text(
-              cat,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: width > 850 ? 12 : 11,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: isSelected
-                    ? (isDark ? Colors.black : Colors.white)
-                    : (isDark ? Colors.white70 : Colors.black87),
-              ),
+          label: Text(
+            cat,
+            style: TextStyle(
+              fontSize: width > 850 ? 12 : 11,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              color: isSelected
+                  ? (isDark ? Colors.black : Colors.white)
+                  : (isDark ? Colors.white70 : Colors.black87),
             ),
           ),
           selected: isSelected,
@@ -352,9 +339,9 @@ class _SkillsPageState extends State<SkillsPage> {
               isDark ? AppConstants.cardDark : AppConstants.cardLight,
           checkmarkColor: isDark ? Colors.black : Colors.white,
           showCheckmark: false,
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(20),
             side: BorderSide(
               color: isSelected
                   ? theme.primaryColor
@@ -364,7 +351,7 @@ class _SkillsPageState extends State<SkillsPage> {
             ),
           ),
         );
-      },
+      }).toList(),
     );
   }
 }

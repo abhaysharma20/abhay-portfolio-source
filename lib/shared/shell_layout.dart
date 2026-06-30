@@ -39,12 +39,13 @@ class _ShellLayoutState extends State<ShellLayout> with TickerProviderStateMixin
   @override
   void didUpdateWidget(covariant ShellLayout oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Scroll to top instantly when path changes
     if (oldWidget.currentPath != widget.currentPath) {
+      // Reset scroll instantly so new page always starts at top
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(0.0);
+      }
+      // Close mobile drawer if open
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (_scrollController.hasClients) {
-          _scrollController.jumpTo(0.0);
-        }
         if (_scaffoldKey.currentState?.isEndDrawerOpen ?? false) {
           Navigator.of(context).pop();
         }

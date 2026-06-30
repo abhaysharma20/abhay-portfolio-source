@@ -107,19 +107,34 @@ class AppRouter {
     return CustomTransitionPage(
       key: state.pageKey,
       child: child,
+      transitionDuration: const Duration(milliseconds: 350),
+      reverseTransitionDuration: const Duration(milliseconds: 250),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        // ── Incoming page: fade + subtle slide up ─────────────────────
+        final enterFade = CurveTween(curve: Curves.easeOut).animate(animation);
+        final enterSlide = Tween<Offset>(
+          begin: const Offset(0.0, 0.03),
+          end: Offset.zero,
+        ).chain(CurveTween(curve: Curves.easeOutCubic)).animate(animation);
+
+        // ── Outgoing page: fade out as the new one arrives ────────────
+        final exitFade = Tween<double>(begin: 1.0, end: 0.0)
+            .chain(CurveTween(curve: Curves.easeIn))
+            .animate(secondaryAnimation);
+
         return FadeTransition(
-          opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0.0, 0.04),
-              end: Offset.zero,
-            ).chain(CurveTween(curve: Curves.easeOutCubic)).animate(animation),
-            child: child,
+          opacity: exitFade, // fades out old page
+          child: FadeTransition(
+            opacity: enterFade, // fades in new page
+            child: ClipRect(
+              child: SlideTransition(
+                position: enterSlide,
+                child: child,
+              ),
+            ),
           ),
         );
       },
-      transitionDuration: const Duration(milliseconds: 400),
     );
   }
 }
