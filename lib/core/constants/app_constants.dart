@@ -24,7 +24,7 @@ class AppConstants {
   // Brand colors
   static const Color primaryColor = Color(0xFF00E5FF); // Neon Cyan
   static const Color secondaryColor = Color(0xFF7C4DFF); // Deep Purple
-  static const Color accentColor = Color(0xFFFF4081); // Bright Pink
+  static const Color accentColor = Color(0xFFFFB300); // Electric Amber
 
   // Dark mode layout colors (Vercel/Linear style)
   static const Color bgDark = Color(0xFF030303);
@@ -227,7 +227,7 @@ class AppConstants {
     },
     {
       "id": "workerpool",
-      "title": "Workerpool",
+      "title": "Workerpool by NobelPage",
       "desc":
           "An on-demand home services marketplace and coordinator dashboard built like Urban Company. Powered by a Node.js backend and MongoDB database, the platform features a responsive time-slot reservation calendar, dynamic category browsing, and an interactive service provider cockpit to track bookings and payouts. Seamlessly integrates Stripe checkout for secure payments, alongside automated invoice generation for completed tasks.",
       "isHighlighted": false,
@@ -239,21 +239,21 @@ class AppConstants {
       ],
       "tech": ["Flutter", "Node.js", "Express", "MongoDB", "REST APIs"]
     },
-    // {
-    //   "id": "the_teachers_app",
-    //   "title": "The Teacher App",
-    //   "desc":
-    //       "A comprehensive digital ecosystem developed for the Bharti Airtel Foundation in collaboration with the CK-12 Foundation to empower K-12 educators across India. The app integrates over 45 AI-enabled productivity tools to assist teachers with automatic lesson planning, dynamic classroom content creation, and pedagogy support. Educators have access to NEP 2020-aligned training modules, digital course catalogs, a Teachers' Lounge community hub for peer networking, and live webinars.",
-    //   "isHighlighted": false,
-    //   "features": [
-    //     "45+ AI-enabled tools to assist teachers with lesson planning, content creation, and classroom management",
-    //     "Vast, NEP 2020-aligned content library for Classes 1 to 12 containing courses, videos, podcasts, and question banks",
-    //     "Structured professional development courses including Foundational Literacy & Numeracy (FLN) and pedagogy modules",
-    //     "Teachers' Lounge community hub for networking, sharing creative strategies, and peer collaboration",
-    //     "Interactive engagement formats including quizzes, polls, webinars, and national-level competitions"
-    //   ],
-    //   "tech": ["Flutter", "Dart", "Firebase", "AI Integration", "REST APIs","Python"]
-    // },
+    {
+      "id": "the_teachers_app",
+      "title": "The Teacher App",
+      "desc":
+          "A comprehensive digital ecosystem developed for the Bharti Airtel Foundation in collaboration with the CK-12 Foundation to empower K-12 educators across India. The app integrates over 45 AI-enabled productivity tools to assist teachers with automatic lesson planning, dynamic classroom content creation, and pedagogy support. Educators have access to NEP 2020-aligned training modules, digital course catalogs, a Teachers' Lounge community hub for peer networking, and live webinars.",
+      "isHighlighted": false,
+      "features": [
+        "45+ AI-enabled tools to assist teachers with lesson planning, content creation, and classroom management",
+        "Vast, NEP 2020-aligned content library for Classes 1 to 12 containing courses, videos, podcasts, and question banks",
+        "Structured professional development courses including Foundational Literacy & Numeracy (FLN) and pedagogy modules",
+        "Teachers' Lounge community hub for networking, sharing creative strategies, and peer collaboration",
+        "Interactive engagement formats including quizzes, polls, webinars, and national-level competitions"
+      ],
+      "tech": ["Flutter", "Dart", "Firebase", "AI Integration", "REST APIs","Python"]
+    },
     {
       "id": "trimly",
       "title": "Trimly - Salon & Stylist Booking App",
