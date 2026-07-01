@@ -76,6 +76,7 @@ const Map<String, ({IconData icon, Color color})> _skillIcons = {
   "Stripe": (icon: FontAwesomeIcons.stripe, color: Color(0xFF6772E5)),
   "Paymob": (icon: FontAwesomeIcons.moneyBillWave, color: Color(0xFF00A86B)),
   "Razorpay": (icon: FontAwesomeIcons.rupeeSign, color: Color(0xFF2D81F7)),
+  "Paystack": (icon: FontAwesomeIcons.moneyBill1Wave, color: Color(0xFF00C3F7)),
   "In-App Purchases (IAP)": (icon: FontAwesomeIcons.bagShopping, color: Color(0xFFFF6F00)),
 
   // Node/Backend extras (used in projects)
@@ -156,6 +157,7 @@ class _SkillsPageState extends State<SkillsPage> {
       "Stripe": 0.85,
       "Paymob": 0.82,
       "Razorpay": 0.80,
+      "Paystack": 0.82,
       "In-App Purchases (IAP)": 0.85,
     };
 
@@ -265,7 +267,7 @@ class _SkillsPageState extends State<SkillsPage> {
                             crossAxisCount: gridColumns,
                             crossAxisSpacing: 16,
                             mainAxisSpacing: 16,
-                            childAspectRatio: 1.25,
+                            childAspectRatio: 1.75,
                           ),
                           itemCount: filteredSkills.length,
                           itemBuilder: (context, index) {

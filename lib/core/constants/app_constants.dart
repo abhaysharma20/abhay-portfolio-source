@@ -90,6 +90,7 @@ class AppConstants {
       "Stripe",
       "Paymob",
       "Razorpay",
+      "Paystack",
       "In-App Purchases (IAP)"
     ],
   };
