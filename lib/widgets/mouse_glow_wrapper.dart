@@ -52,58 +52,55 @@ class _MouseGlowWrapperState extends State<MouseGlowWrapper>
   final math.Random _rng = math.Random();
 
   static const _colors = [
-    AppConstants.primaryColor,   // cyan
-    AppConstants.secondaryColor, // purple
-    AppConstants.accentColor,    // amber
+    AppConstants.primaryColor,    // neon cyan
+    AppConstants.secondaryColor,  // deep purple
+    AppConstants.accentColor,     // electric amber
   ];
 
-  // ── Spawn effects on tap ──────────────────────────────────────────────────
-  void _onTapDown(TapDownDetails details) {
-    final pos = details.localPosition;
+  // ── Spawn on pointer down (Listener — never swallowed by ScrollView) ────
+  void _onPointerDown(Offset localPos) {
     final color = _colors[_rng.nextInt(_colors.length)];
 
-    // 2 concentric expanding rings
+    // 2 concentric expanding ring ripples
     for (int i = 0; i < 2; i++) {
       final ctrl = AnimationController(
         vsync: this,
-        duration: Duration(milliseconds: 550 + i * 150),
+        duration: Duration(milliseconds: 500 + i * 160),
       );
-      final ripple = _ClickRipple(position: pos, controller: ctrl, color: color);
-      ctrl.addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          setState(() => _ripples.remove(ripple));
+      final ripple = _ClickRipple(position: localPos, controller: ctrl, color: color);
+      ctrl.addStatusListener((s) {
+        if (s == AnimationStatus.completed) {
+          if (mounted) setState(() => _ripples.remove(ripple));
           ctrl.dispose();
         }
       });
       setState(() => _ripples.add(ripple));
-      Future.delayed(Duration(milliseconds: i * 80), () {
+      Future.delayed(Duration(milliseconds: i * 90), () {
         if (mounted) ctrl.forward();
       });
     }
 
-    // 8 floating dot particles bursting outward
-    const particleCount = 8;
-    for (int i = 0; i < particleCount; i++) {
-      final angle = (2 * math.pi / particleCount) * i +
-          _rng.nextDouble() * 0.4 - 0.2;
-      final speed = 55.0 + _rng.nextDouble() * 60;
-      final size = 3.0 + _rng.nextDouble() * 4;
+    // 8 glowing dot particles bursting radially
+    for (int i = 0; i < 8; i++) {
+      final angle = (2 * math.pi / 8) * i + _rng.nextDouble() * 0.5 - 0.25;
+      final speed = 55.0 + _rng.nextDouble() * 65;
+      final size = 3.5 + _rng.nextDouble() * 4.5;
       final pColor = _colors[_rng.nextInt(_colors.length)];
       final ctrl = AnimationController(
         vsync: this,
-        duration: const Duration(milliseconds: 700),
+        duration: const Duration(milliseconds: 750),
       );
       final p = _Particle(
-        origin: pos,
+        origin: localPos,
         angle: angle,
         speed: speed,
         size: size,
         color: pColor,
         controller: ctrl,
       );
-      ctrl.addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          setState(() => _particles.remove(p));
+      ctrl.addStatusListener((s) {
+        if (s == AnimationStatus.completed) {
+          if (mounted) setState(() => _particles.remove(p));
           ctrl.dispose();
         }
       });
@@ -114,12 +111,8 @@ class _MouseGlowWrapperState extends State<MouseGlowWrapper>
 
   @override
   void dispose() {
-    for (final r in _ripples) {
-      r.controller.dispose();
-    }
-    for (final p in _particles) {
-      p.controller.dispose();
-    }
+    for (final r in _ripples) { r.controller.dispose(); }
+    for (final p in _particles) { p.controller.dispose(); }
     super.dispose();
   }
 
@@ -128,103 +121,112 @@ class _MouseGlowWrapperState extends State<MouseGlowWrapper>
     final theme = Theme.of(context);
     final glowColor = theme.primaryColor;
 
-    return GestureDetector(
-      onTapDown: _onTapDown,
+    // Use Listener instead of GestureDetector — pointer events bypass
+    // gesture arena so they're never consumed by ScrollView/other widgets.
+    return Listener(
       behavior: HitTestBehavior.translucent,
+      onPointerDown: (e) => _onPointerDown(e.localPosition),
       child: MouseRegion(
         onEnter: (_) => setState(() => _isHovering = true),
         onExit: (_) => setState(() => _isHovering = false),
-        onHover: (event) => setState(() => _mousePosition = event.localPosition),
+        onHover: (e) => setState(() => _mousePosition = e.localPosition),
         child: Stack(
           children: [
-            // ── Main content ───────────────────────────────────────────
+            // ── Main content ────────────────────────────────────────────
             widget.child,
 
-            // ── Cursor glow follow ─────────────────────────────────────
-            IgnorePointer(
-              child: AnimatedOpacity(
-                opacity: _isHovering ? 1.0 : 0.0,
-                duration: const Duration(milliseconds: 250),
-                child: CustomPaint(
-                  size: Size.infinite,
-                  painter: GlowPainter(_mousePosition, glowColor),
+            // ── Cursor glow follow ──────────────────────────────────────
+            Positioned.fill(
+              child: IgnorePointer(
+                child: AnimatedOpacity(
+                  opacity: _isHovering ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 250),
+                  child: CustomPaint(
+                    painter: GlowPainter(_mousePosition, glowColor),
+                  ),
                 ),
               ),
             ),
 
-            // ── Click ripples ──────────────────────────────────────────
-            IgnorePointer(
-              child: Stack(
-                children: _ripples.map((r) {
-                  return AnimatedBuilder(
-                    animation: r.controller,
-                    builder: (_, __) {
-                      final t = CurvedAnimation(
-                        parent: r.controller,
-                        curve: Curves.easeOut,
-                      ).value;
-                      final radius = t * 80;
-                      final opacity = (1.0 - t).clamp(0.0, 1.0);
-                      return Positioned(
-                        left: r.position.dx - radius,
-                        top: r.position.dy - radius,
-                        child: Container(
+            // ── Ripple rings — Positioned.fill ensures full-screen canvas ──
+            Positioned.fill(
+              child: IgnorePointer(
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: _ripples.map((r) {
+                    return AnimatedBuilder(
+                      animation: r.controller,
+                      builder: (_, __) {
+                        final t = CurvedAnimation(
+                          parent: r.controller,
+                          curve: Curves.easeOut,
+                        ).value;
+                        final radius = t * 85.0;
+                        final opacity = (1.0 - t).clamp(0.0, 1.0);
+                        return Positioned(
+                          left: r.position.dx - radius,
+                          top: r.position.dy - radius,
                           width: radius * 2,
                           height: radius * 2,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: r.color.withOpacity(opacity * 0.7),
-                              width: (2.0 * (1 - t)).clamp(0.5, 2.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: r.color.withOpacity(opacity * 0.75),
+                                width: (2.5 * (1 - t * 0.8)).clamp(0.4, 2.5),
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  );
-                }).toList(),
+                        );
+                      },
+                    );
+                  }).toList(),
+                ),
               ),
             ),
 
-            // ── Floating particles ─────────────────────────────────────
-            IgnorePointer(
-              child: Stack(
-                children: _particles.map((p) {
-                  return AnimatedBuilder(
-                    animation: p.controller,
-                    builder: (_, __) {
-                      final t = CurvedAnimation(
-                        parent: p.controller,
-                        curve: Curves.easeOut,
-                      ).value;
-                      final dx = math.cos(p.angle) * p.speed * t;
-                      final dy = math.sin(p.angle) * p.speed * t - 30 * t;
-                      final opacity = (1.0 - t).clamp(0.0, 1.0);
-                      return Positioned(
-                        left: p.origin.dx + dx - p.size / 2,
-                        top: p.origin.dy + dy - p.size / 2,
-                        child: Opacity(
-                          opacity: opacity,
-                          child: Container(
-                            width: p.size,
-                            height: p.size,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: p.color.withOpacity(0.85),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: p.color.withOpacity(0.5),
-                                  blurRadius: 6,
-                                  spreadRadius: 1,
-                                ),
-                              ],
+            // ── Floating particles — Positioned.fill ensures full-screen canvas
+            Positioned.fill(
+              child: IgnorePointer(
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: _particles.map((p) {
+                    return AnimatedBuilder(
+                      animation: p.controller,
+                      builder: (_, __) {
+                        final t = CurvedAnimation(
+                          parent: p.controller,
+                          curve: Curves.easeOut,
+                        ).value;
+                        final dx = math.cos(p.angle) * p.speed * t;
+                        final dy = math.sin(p.angle) * p.speed * t - 35 * t;
+                        final opacity = (1.0 - t).clamp(0.0, 1.0);
+                        return Positioned(
+                          left: p.origin.dx + dx - p.size / 2,
+                          top: p.origin.dy + dy - p.size / 2,
+                          width: p.size,
+                          height: p.size,
+                          child: Opacity(
+                            opacity: opacity,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: p.color.withOpacity(0.9),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: p.color.withOpacity(0.55),
+                                    blurRadius: 8,
+                                    spreadRadius: 1,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  );
-                }).toList(),
+                        );
+                      },
+                    );
+                  }).toList(),
+                ),
               ),
             ),
           ],
@@ -243,6 +245,7 @@ class GlowPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    if (size.isEmpty) return;
     final paint = Paint()
       ..shader = RadialGradient(
         center: Alignment(
@@ -262,6 +265,6 @@ class GlowPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(GlowPainter oldDelegate) =>
-      position != oldDelegate.position || glowColor != oldDelegate.glowColor;
+  bool shouldRepaint(GlowPainter old) =>
+      position != old.position || glowColor != old.glowColor;
 }
