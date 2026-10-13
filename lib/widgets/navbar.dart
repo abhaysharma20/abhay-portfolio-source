@@ -8,11 +8,15 @@ import '../core/constants/app_constants.dart';
 class Navbar extends StatelessWidget implements PreferredSizeWidget {
   final String currentPath;
   final VoidCallback onMenuPressed;
+  final bool isSinglePage;
+  final void Function(String path)? onNavItemTapped;
 
   const Navbar({
     super.key,
     required this.currentPath,
     required this.onMenuPressed,
+    this.isSinglePage = false,
+    this.onNavItemTapped,
   });
 
   @override
@@ -51,7 +55,13 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
               children: [
                 // ── Logo ───────────────────────────────────────────
                 GestureDetector(
-                  onTap: () => context.go('/'),
+                  onTap: () {
+                    if (isSinglePage) {
+                      onNavItemTapped?.call('/');
+                    } else {
+                      context.go('/');
+                    }
+                  },
                   child: MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: Row(
@@ -87,10 +97,32 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
                     ],
                   ),
 
-                // ── Actions (Theme toggle & Mobile menu) ────────────
+                // ── Actions ─────────────────────────────────────────
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    // View mode toggle
+                    Tooltip(
+                      message: isSinglePage
+                          ? 'Switch to Tab View'
+                          : 'Switch to Single Page',
+                      child: IconButton(
+                        icon: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 250),
+                          child: Icon(
+                            isSinglePage
+                                ? Icons.table_chart_outlined
+                                : Icons.table_rows_outlined,
+                            key: ValueKey(isSinglePage),
+                            color: isSinglePage
+                                ? AppConstants.primaryColor
+                                : (isDark ? Colors.white70 : Colors.black87),
+                          ),
+                        ),
+                        onPressed: () => themeProvider.toggleViewMode(),
+                      ),
+                    ),
+                    // Theme toggle
                     IconButton(
                       icon: Icon(
                         isDark
@@ -99,7 +131,7 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
                         color: isDark ? Colors.white70 : Colors.black87,
                       ),
                       onPressed: () => themeProvider.toggleTheme(),
-                      tooltip: "Toggle Theme",
+                      tooltip: 'Toggle Theme',
                     ),
                     if (isMobile) ...[
                       const SizedBox(width: 8),
@@ -129,7 +161,13 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: TextButton(
-        onPressed: () => context.go(path),
+        onPressed: () {
+          if (isSinglePage) {
+            onNavItemTapped?.call(path);
+          } else {
+            context.go(path);
+          }
+        },
         style: TextButton.styleFrom(
           foregroundColor: isSelected
               ? theme.primaryColor
@@ -278,9 +316,9 @@ class _AnimatedLogoWidgetState extends State<_AnimatedLogoWidget>
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeInOut,
               child: _badge(
-                child: Stack(
+                child: const Stack(
                   alignment: Alignment.center,
-                  children: const [
+                  children: [
                     Positioned(
                       top: 6,
                       child: Icon(

@@ -58,7 +58,14 @@ class AppConstants {
   // Skills divided by categories
   static const Map<String, List<String>> skills = {
     "Mobile Development": ["Flutter", "Dart", "React Native", "Kotlin"],
-    "Backend": ["Python", "REST APIs", "Firebase", "Authentication", "JSON"],
+    "Backend": [
+      "Python",
+      "FastAPI",
+      "REST APIs",
+      "Firebase",
+      "Authentication",
+      "JSON"
+    ],
     "Architecture": [
       "Clean Architecture",
       "MVVM",
@@ -66,7 +73,14 @@ class AppConstants {
       "Dependency Injection"
     ],
     "State Management": ["GetX", "Provider", "BLoC"],
-    "Database": ["Hive", "SQLite", "Firebase Firestore", "Shared Preferences"],
+    "Database": [
+      "PostgreSQL",
+      "Hive",
+      "SQLite",
+      "Firebase Firestore",
+      "Shared Preferences"
+    ],
+    "AI & LLMs": ["LLM"],
     "Tools": ["Android Studio", "VS Code", "Git", "GitHub", "Figma", "Postman"],
     "CI/CD": ["Fastlane", "GitHub Actions"],
     "UI/UX": [

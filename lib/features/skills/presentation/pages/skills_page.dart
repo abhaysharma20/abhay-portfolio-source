@@ -9,7 +9,7 @@ import '../../../../core/constants/app_constants.dart';
 
 const _kDefaultColor = Color(0xFF607D8B);
 
-const Map<String, ({IconData icon, Color color})> _skillIcons = {
+const Map<String, ({FaIconData icon, Color color})> _skillIcons = {
   // Mobile
   "Flutter": (icon: FontAwesomeIcons.flutter, color: Color(0xFF54C5F8)),
   "Dart": (icon: FontAwesomeIcons.dartLang, color: Color(0xFF00B4AB)),
@@ -18,6 +18,7 @@ const Map<String, ({IconData icon, Color color})> _skillIcons = {
 
   // Backend
   "Python": (icon: FontAwesomeIcons.python, color: Color(0xFF3776AB)),
+  "FastAPI": (icon: FontAwesomeIcons.boltLightning, color: Color(0xFF009688)),
   "REST APIs": (icon: FontAwesomeIcons.plug, color: Color(0xFF4CAF50)),
   "Firebase": (icon: FontAwesomeIcons.fire, color: Color(0xFFFF9800)),
   "Authentication": (icon: FontAwesomeIcons.lock, color: Color(0xFF9C27B0)),
@@ -35,10 +36,15 @@ const Map<String, ({IconData icon, Color color})> _skillIcons = {
   "BLoC": (icon: FontAwesomeIcons.stream, color: Color(0xFF3F51B5)),
 
   // Database
+  "PostgreSQL": (icon: FontAwesomeIcons.database, color: Color(0xFF336791)),
   "Hive": (icon: FontAwesomeIcons.hive, color: Color(0xFFFFC107)),
   "SQLite": (icon: FontAwesomeIcons.database, color: Color(0xFF607D8B)),
   "Firebase Firestore": (icon: FontAwesomeIcons.cloudArrowUp, color: Color(0xFFFF9800)),
   "Shared Preferences": (icon: FontAwesomeIcons.floppyDisk, color: Color(0xFF8BC34A)),
+
+  // AI & LLMs
+  "LLM": (icon: FontAwesomeIcons.brain, color: Color(0xFF10A37F)),
+  "LLMs": (icon: FontAwesomeIcons.brain, color: Color(0xFF10A37F)),
 
   // Tools
   "Android Studio": (icon: FontAwesomeIcons.android, color: Color(0xFF3DDC84)),
@@ -86,7 +92,7 @@ const Map<String, ({IconData icon, Color color})> _skillIcons = {
   "WebSockets": (icon: FontAwesomeIcons.wifi, color: Color(0xFF29B6F6)),
 };
 
-({IconData icon, Color color}) _iconFor(String name) =>
+({FaIconData icon, Color color}) _iconFor(String name) =>
     _skillIcons[name] ?? (icon: FontAwesomeIcons.code, color: _kDefaultColor);
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -118,6 +124,7 @@ class _SkillsPageState extends State<SkillsPage> {
       "React Native": 0.75,
       "Kotlin": 0.70,
       "Python": 0.85,
+      "FastAPI": 0.88,
       "REST APIs": 0.90,
       "Firebase": 0.90,
       "Authentication": 0.88,
@@ -129,10 +136,13 @@ class _SkillsPageState extends State<SkillsPage> {
       "GetX": 0.85,
       "Provider": 0.92,
       "BLoC": 0.90,
+      "PostgreSQL": 0.85,
       "Hive": 0.85,
       "SQLite": 0.82,
       "Firebase Firestore": 0.90,
       "Shared Preferences": 0.95,
+      "LLM": 0.88,
+      "LLMs": 0.88,
       "Android Studio": 0.90,
       "VS Code": 0.92,
       "Git": 0.88,
@@ -172,12 +182,25 @@ class _SkillsPageState extends State<SkillsPage> {
       }
     });
 
+    final trimmedQuery = _searchQuery.trim().toLowerCase();
     return allSkillsList.where((skill) {
-      final matchesCategory = skill["category"] == _selectedCategory;
-      final matchesSearch = skill["name"]
-          .toString()
-          .toLowerCase()
-          .contains(_searchQuery.toLowerCase());
+      final matchesCategory =
+          trimmedQuery.isEmpty ? skill["category"] == _selectedCategory : true;
+      if (trimmedQuery.isEmpty) return matchesCategory;
+
+      final name = skill["name"].toString().toLowerCase();
+      final nameClean = name.replaceAll(RegExp(r'[^a-z0-9]'), '');
+      final queryClean = trimmedQuery.replaceAll(RegExp(r'[^a-z0-9]'), '');
+      final terms = trimmedQuery
+          .split(RegExp(r'\s+'))
+          .where((t) => t.isNotEmpty)
+          .toList();
+
+      final matchesSearch = name.contains(trimmedQuery) ||
+          (queryClean.isNotEmpty && nameClean.contains(queryClean)) ||
+          terms.every(
+              (term) => name.contains(term) || nameClean.contains(term));
+
       return matchesCategory && matchesSearch;
     }).toList();
   }

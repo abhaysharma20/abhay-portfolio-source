@@ -229,7 +229,7 @@ class HomePage extends StatelessWidget {
                   style: TextStyle(fontFamily: 'Courier', fontSize: 13, color: Colors.blueAccent, fontWeight: FontWeight.bold),
                 ),
                 const Text(
-                  "  name = 'Abhay';\n  skills = [\n    'Flutter',\n    'Clean Arch',\n    'Python'\n  ];",
+                  "  name = 'Abhay';\n  skills = [\n    'Flutter',\n    'Python',\n    'FastAPI',\n    'LLMs'\n  ];",
                   style: TextStyle(fontFamily: 'Courier', fontSize: 13, color: Colors.purpleAccent, height: 1.4),
                 ),
                 const Text(
@@ -244,7 +244,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _socialIcon(IconData icon, VoidCallback onTap, String tooltip) {
+  Widget _socialIcon(FaIconData icon, VoidCallback onTap, String tooltip) {
     return Padding(
       padding: const EdgeInsets.only(right: 20),
       child: Tooltip(

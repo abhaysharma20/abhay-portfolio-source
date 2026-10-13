@@ -214,7 +214,7 @@ class _ContactPageState extends State<ContactPage> {
 
   Widget _socialButton(
     BuildContext context, {
-    required IconData icon,
+    required FaIconData icon,
     required String label,
     required VoidCallback onTap,
     required bool isDark,
