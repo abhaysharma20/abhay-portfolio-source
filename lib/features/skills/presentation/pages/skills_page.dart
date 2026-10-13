@@ -280,6 +280,9 @@ class _SkillsPageState extends State<SkillsPage> {
                     )
                   : LayoutBuilder(
                       builder: (context, constraints) {
+                        if (constraints.maxWidth <= 0) {
+                          return const SizedBox.shrink();
+                        }
                         final gridColumns =
                             width > 1000 ? 4 : (width > 700 ? 3 : 2);
                         return GridView.builder(
